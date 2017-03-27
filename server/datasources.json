@@ -1,0 +1,16 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongoDS": {
+    "host": "ds139370.mlab.com",
+    "port": 39370,
+    "url": "mongodb://elvis:elvis@ds139370.mlab.com:39370/elvis-lb",
+    "database": "elvis-lb",
+    "password": "elvis",
+    "name": "mongoDS",
+    "user": "elvis",
+    "connector": "mongodb"
+  }
+}

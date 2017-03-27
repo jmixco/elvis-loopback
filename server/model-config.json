@@ -1,0 +1,61 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongoDS"
+  },
+  "AccessToken": {
+    "dataSource": "mongoDS",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongoDS",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongoDS",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongoDS",
+    "public": false
+  },
+  "Message": {
+    "dataSource": null
+  },
+  "Person": {
+    "dataSource": "mongoDS",
+    "public": true
+  },
+  "Product": {
+    "dataSource": "mongoDS",
+    "public": true
+  },
+  "ProductPriceHistory": {
+    "dataSource": "mongoDS",
+    "public": false
+  },
+  "PurchaseHistory": {
+    "dataSource": "mongoDS",
+    "public": false
+  },
+  "ProductLike": {
+    "dataSource": "mongoDS",
+    "public": true
+  }
+}

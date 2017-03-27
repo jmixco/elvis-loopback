@@ -1,0 +1,52 @@
+{
+  "name": "ProductPriceHistory",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "prevCost": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "newCost": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "inserted": {
+      "type": "date",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "person": {
+      "type": "belongsTo",
+      "model": "Person",
+      "foreignKey": "modifiedByID"
+    },
+    "product": {
+      "type": "hasOne",
+      "model": "Product",
+      "foreignKey": "productId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

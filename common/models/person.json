@@ -1,0 +1,38 @@
+{
+  "name": "Person",
+  "plural": "people",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "productPriceHistories": {
+      "type": "hasMany",
+      "model": "ProductPriceHistory",
+      "foreignKey": ""
+    },
+    "likes": {
+      "type": "hasMany",
+      "model": "ProductLike",
+      "foreignKey": "personId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}
