@@ -1,6 +1,8 @@
-# elvis-loopback
+﻿# elvis-loopback
 # ElvisStore
 
+## DEMO:
+[Heroku demo ](https://elvisloop.herokuapp.com/).
 
 ## Run this project
 
