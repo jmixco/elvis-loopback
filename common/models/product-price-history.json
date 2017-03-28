@@ -1,9 +1,12 @@
-{
+﻿{
   "name": "ProductPriceHistory",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
+  },
+  "mixins": {
+    "AuditFields": true
   },
   "properties": {
     "prevCost": {
@@ -15,10 +18,6 @@
       "type": "number",
       "required": true,
       "default": 0
-    },
-    "inserted": {
-      "type": "date",
-      "required": true
     }
   },
   "validations": [],

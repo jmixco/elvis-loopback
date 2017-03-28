@@ -1,10 +1,13 @@
-{
+﻿{
   "name": "Person",
   "plural": "people",
   "base": "User",
   "idInjection": true,
   "options": {
     "validateUpsert": true
+  },
+  "mixins": {
+    "AuditFields": true
   },
   "properties": {},
   "validations": [],

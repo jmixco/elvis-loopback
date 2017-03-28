@@ -5,6 +5,9 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "AuditFields": true
+  },
   "properties": {
     "name": {
       "type": "string",

@@ -1,15 +1,15 @@
-{
+﻿{
   "name": "ProductLike",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "AuditFields": true
+  },
   "properties": {
-    "date": {
-      "type": "date",
-      "required": true
-    }
+
   },
   "validations": [],
   "relations": {

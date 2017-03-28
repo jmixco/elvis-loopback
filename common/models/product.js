@@ -19,24 +19,24 @@ module.exports = function (Product) {
     Product.beforeRemote('deleteById', function (ctx, modelInstance, next) {
         //soft delete
         let id = ctx.args.id;
-        Product.update({ id: id }, { active: false })
+        Product.update({ id: id }, { active: false, modified: new Date() })
             .then((product) => {
-                if (product.count>0) {
+                if (product.count > 0) {
                     ctx.res.statusCode = 204;
                     ctx.res.end();
                 } else {
                     ctx.res.statusCode = 404
                     ctx.res.end();
                 }
-                
+
             })
             .catch((err) => {
                 ctx.res.statusCode = 500;
                 ctx.res.send(err);
                 //ctx.res.end();
             });
-       
-        
+
+
         //next();
     });
     function getCurrentUserId(ctx) {
@@ -81,7 +81,7 @@ module.exports = function (Product) {
             if (!product) {
 
                 return Promise.reject({ statusCode: 404, message: 'Product Not Found.' });
-            }            
+            }
             if (product.inStock < data.quantity) {
                 return Promise.reject({ statusCode: 400, message: 'Not enough product in stock.' });
             }
@@ -91,8 +91,7 @@ module.exports = function (Product) {
                 productId: product.id,
                 personId: userId,
                 quantity: data.quantity,
-                unitCost: product.cost,
-                inserted: new Date()
+                unitCost: product.cost
             });
             return product.save();
         }).then((product) => {
@@ -168,8 +167,8 @@ module.exports = function (Product) {
                             return product.likes
                                 .create({
                                     personId: userId,
-                                    productId: product.id,
-                                    date: new Date()
+                                    productId: product.id
+
                                 }).then((data) => {
                                     product.likeCount += 1;
                                     return product.save();
