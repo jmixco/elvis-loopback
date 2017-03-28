@@ -9,6 +9,29 @@ module.exports = function (Product) {
         var userId = accessToken && accessToken.userId;
         return userId;
     }
+    Product.beforeRemote('find', function (context, modelInstance, next) {
+        var reject = function () {
+            process.nextTick(function () {
+                next(null, false);
+            });
+        };
+
+
+
+        //I get the details of the user who sent the request 
+        //to learn which company does he belong to
+
+        if (!context.args.filter)
+            context.args.filter = {};
+        if (!context.args.filter.order) {
+            context.args.filter.order = ['name ASC'];
+        }
+        //context.args.filter.where = { brandId: user.companyId };
+        console.log(context.args.filter);
+        next();
+
+
+    });
     //Location.disableRemoteMethodByName('prototype.updateAttributes');
     Product.buy = function (ctx, options, data, id, cb) {
         // request/ response ctx.req/ ctx.res
@@ -45,7 +68,7 @@ module.exports = function (Product) {
 
                     return Promise.reject({ statusCode: 404, message: 'Product Not Found' });
                 }
-                if (!data.stock||data.stock<0) {
+                if (!data.stock || data.stock < 0) {
                     return Promise.reject({ statusCode: 400, message: 'property stock should be >=0' });
                 }
                 product.inStock = data.stock;
@@ -68,7 +91,7 @@ module.exports = function (Product) {
                 if (!data.price || data.price < 0) {
                     return Promise.reject({ statusCode: 400, message: 'property price should be >=0' });
                 }
-                product.price = data.price;
+                product.cost = data.price;
                 return product.save();
             }).then((product) => {
                 cb(null, product);
@@ -93,20 +116,25 @@ module.exports = function (Product) {
                     return Promise.reject({ statusCode: 404, message: 'Product Not Found' });
                 }
                 console.log(`like poduct id: ${id}  by user:${userId}`, data);
-                return product.likes({ personId: userId }).then((people) => {
+                return product.likes({ where: { personId: userId } })
+                    .then((likes) => {
 
-                    if (people.length > 0) {
-                        //like found
-                        return product.likes;
-                    } else {
-                        return product.likes.create({
-                            personId: userId,
-                            productId: product.id,
-                            date: new Date()
-                        });
-                    }
+                        if (likes.length > 0) {
+                            //like found
+                            return product;
+                        } else {
+                            return product.likes
+                                .create({
+                                    personId: userId,
+                                    productId: product.id,
+                                    date: new Date()
+                                }).then((data) => {
+                                    product.likeCount += 1;
+                                    return product.save();
+                                });
+                        }
 
-                })
+                    })
 
             })
             .then((likes) => {
@@ -114,12 +142,13 @@ module.exports = function (Product) {
 
 
             }).then((product) => {
+
                 cb(null, product);
             }).catch(error => {
                 cb(error, null);
             });
     }
-    
+
     Product.dislike = function (ctx, options, data, id, cb) {
         const userId = getCurrentUserId(ctx);
         var objectId = Product.getDataSource().connector.getDefaultIdType();
@@ -132,19 +161,18 @@ module.exports = function (Product) {
                     return Promise.reject({ statusCode: 404, message: 'Product Not Found' });
                 }
                 console.log(`like poduct id: ${id}  by user:${userId}`, data);
-                return product.likes({ personId: userId })
+                return product.likes({ where: { personId: userId } })
                     .then((likes) => {
 
                         if (likes.length > 0) {
                             //like found
-                            likes.forEach((l, index, arr) => {
-                                product.likes.destroy(l.id, (error) => {
-                                    if (error) {
-                                        console.log(error);
-                                    }
+
+                            return product.likes.destroy(likes[0].id)
+                                .then((data) => {
+                                    product.likeCount -= 1;
+                                    return product.save();
                                 });
-                            });
-                            return product.save();
+
                         } else {
                             return product;
                         }

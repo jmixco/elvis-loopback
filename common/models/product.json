@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Product",
   "base": "PersistedModel",
   "idInjection": true,
@@ -16,6 +16,11 @@
       "default": 0
     },
     "inStock": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "likeCount": {
       "type": "number",
       "required": true,
       "default": 0
